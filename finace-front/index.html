@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>首页 - 个人理财管理系统</title>
+  <link rel="stylesheet" href="css/common.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+<div class="navbar">
+  <div class="container">
+    <div>📊 个人理财管理系统</div>
+    <div>
+      <a href="index.html">首页</a>
+      <a href="record.html">记账管理</a>
+      <a href="budget.html">预算管理</a>
+      <a href="javascript:logout()">退出登录</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div style="display:flex;gap:20px;margin-bottom:20px;flex-wrap:wrap;">
+    <div class="card" style="flex:1;text-align:center;min-width:200px;">
+      <h3>本月收入</h3>
+      <h2 style="color:#67c23a" id="income">0</h2>
+    </div>
+    <div class="card" style="flex:1;text-align:center;min-width:200px;">
+      <h3>本月支出</h3>
+      <h2 style="color:#f56c6c" id="expense">0</h2>
+    </div>
+    <div class="card" style="flex:1;text-align:center;min-width:200px;">
+      <h3>本月结余</h3>
+      <h2 style="color:#409eff" id="balance">0</h2>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="title">收支分析图表</div>
+    <div class="chart-box" id="pieChart"></div>
+    <div class="chart-box" id="lineChart"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/utils.js"></script>
+<script type="module" src="js/api.js"></script>
+<script>
+let pieChart, lineChart;
+
+window.onload = async function() {
+  if (!getToken()) { location.href = "login.html"; return; }
+  initCharts();
+  loadData();
+};
+
+function initCharts() {
+  pieChart = echarts.init(document.getElementById("pieChart"));
+  lineChart = echarts.init(document.getElementById("lineChart"));
+}
+
+async function loadData() {
+  const res = await getStatistics();
+  if (res.code !== 200) return;
+  const data = res.data;
+
+  document.getElementById("income").innerText = data.income;
+  document.getElementById("expense").innerText = data.expense;
+  document.getElementById("balance").innerText = data.balance;
+
+  pieChart.setOption({
+    title: { text: "支出分类占比" },
+    tooltip: { trigger: 'item' },
+    series: [{ type: "pie", radius: "50%", data: data.pieData }]
+  });
+
+  lineChart.setOption({
+    title: { text: "近7日收支趋势" },
+    tooltip: { trigger: 'axis' },
+    xAxis: { data: data.dates },
+    yAxis: {},
+    series: [
+      { name: "收入", type: "line", data: data.incomeList },
+      { name: "支出", type: "line", data: data.expenseList }
+    ]
+  });
+}
+</script>
+</body>
+</html>

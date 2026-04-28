@@ -1,0 +1,118 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+.btn-primary {
+  background: #409eff;
+  color: white;
+}
+.btn-success {
+  background: #67c23a;
+  color: white;
+}
+.btn-warning {
+  background: #e6a23c;
+  color: white;
+}
+.btn-danger {
+  background: #f56c6c;
+  color: white;
+}
+
+.form-item {
+  margin-bottom: 18px;
+}
+.form-item label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.form-item input,
+.form-item select,
+.form-item textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.navbar {
+  background: #2c3e50;
+  color: white;
+  padding: 16px 0;
+}
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+}
+.navbar a:hover {
+  color: #409eff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.table th,
+.table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+.table th {
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+.chart-box {
+  width: 100%;
+  height: 350px;
+  margin: 20px 0;
+}

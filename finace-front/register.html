@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>注册 - 个人理财管理系统</title>
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    .register-box {
+      max-width: 450px;
+      margin: 80px auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card register-box">
+    <h2 class="title" style="text-align:center;">用户注册</h2>
+    <form id="regForm">
+      <div class="form-item">
+        <label>用户名</label>
+        <input id="username" placeholder="设置用户名">
+      </div>
+      <div class="form-item">
+        <label>密码</label>
+        <input type="password" id="password" placeholder="设置密码">
+      </div>
+      <div class="form-item">
+        <label>邮箱</label>
+        <input id="email" placeholder="请输入邮箱">
+      </div>
+      <button type="button" class="btn btn-success" style="width:100%" onclick="doRegister()">注册</button>
+    </form>
+    <div style="text-align:center;margin-top:15px;">
+      <a href="login.html">已有账号？去登录</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/utils.js"></script>
+<script>
+// 跳过后端，直接注册成功
+function doRegister() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const email = document.getElementById("email").value.trim();
+
+  if (!username || !password || !email) {
+    alert("请正确填写信息！");
+    return;
+  }
+
+  alert("注册成功！请登录");
+  location.href = "login.html";
+}
+</script>
+</body>
+</html>
