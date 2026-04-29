@@ -1,0 +1,20 @@
+# IDEA 相关配置文件（全部忽略）
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Maven 编译产物
+target/
+*.jar
+*.war
+*.ear
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.bak
+.DS_Store
