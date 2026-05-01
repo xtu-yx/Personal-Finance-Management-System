@@ -17,7 +17,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   alert.className = 'alert';
 
   try {
-    await api.post('/api/user/login', { username, password });
+    const user = await api.post('/api/user/login', { username, password });
+    window.financeApp.saveCurrentUser(user);
     window.location.href = 'dashboard.html';
   } catch (err) {
     alert.textContent = err.message || '登录失败，请检查用户名和密码';
