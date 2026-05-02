@@ -18,3 +18,5 @@ target/
 *.tmp
 *.bak
 .DS_Store
+
+src/main/resources/application.yml
