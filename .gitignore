@@ -18,3 +18,7 @@ target/
 *.tmp
 *.bak
 .DS_Store
+
+src/main/resources/application.ymlbackend/finance/src/main/resources/application.yml
+backend/finance/target/
+.idea/
