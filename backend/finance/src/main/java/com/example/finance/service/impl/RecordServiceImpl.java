@@ -20,6 +20,7 @@ public class RecordServiceImpl implements RecordService {
     public Record add(Record record) {
         // 直接插入，MyBatis-Plus会自动回填自增ID
         recordMapper.insert(record);
+        System.out.println("联调日志：已成功添加记录，ID=" + record.getId()); // 只加这一行
         return record;
     }
 
