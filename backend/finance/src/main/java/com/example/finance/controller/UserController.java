@@ -35,14 +35,25 @@ public class UserController {
     }
 
     // 用户登录: POST /api/user/login
+    // 用户登录: POST /api/user/login
     @PostMapping("/login")
-    public Result<User> login(@RequestBody Map<String, String> params) {
+    public Result<Map<String, Object>> login(@RequestBody Map<String, String> params) {
         String username = params.get("username");
         String password = params.get("password");
 
         User user = userService.login(username, password);
         user.setPassword(null);  // 不返回密码
-        return Result.success("登录成功", user);
+
+        // 生成简单Token（课程项目级别）
+        String token = user.getId() + ":" + System.currentTimeMillis();
+
+        // 组装返回结果
+        Map<String, Object> result = new java.util.HashMap<>();
+        result.put("userId", user.getId());
+        result.put("username", user.getUsername());
+        result.put("token", token);
+
+        return Result.success("登录成功", result);
     }
 
     // 获取当前用户信息: GET /api/user/info

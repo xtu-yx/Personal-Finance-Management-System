@@ -21,6 +21,11 @@ public class RecordServiceImpl implements RecordService {
         // 直接插入，MyBatis-Plus会自动回填自增ID
         recordMapper.insert(record);
         System.out.println("联调日志：已成功添加记录，ID=" + record.getId()); // 只加这一行
+
+        if ("expense".equals(record.getType())) {
+            String month = record.getRecordDate().toString().substring(0, 7); // 格式：2026-05
+            System.out.println("预算检查：用户" + record.getUserId() + "在" + month + "添加了一笔支出");
+        }
         return record;
     }
 
