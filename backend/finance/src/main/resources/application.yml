@@ -8,10 +8,11 @@ spring:
     password: powerRX86403242@
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  jackson:
-    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: Asia/Shanghai
+    jackson:
+      property-naming-strategy: SNAKE_CASE
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: Asia/Shanghai
+
 
 mybatis-plus:
   configuration:
