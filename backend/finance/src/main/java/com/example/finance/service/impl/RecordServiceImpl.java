@@ -18,13 +18,29 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Record add(Record record) {
+        // 👇👇👇 新增：金额校验（测试清单要求：金额为0不能添加）
+        if (record.getAmount() == null || record.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("金额必须大于0");
+        }
+
         // 直接插入，MyBatis-Plus会自动回填自增ID
         recordMapper.insert(record);
+        System.out.println("联调日志：已成功添加记录，ID=" + record.getId());
+
+        if ("expense".equals(record.getType())) {
+            String month = record.getRecordDate().toString().substring(0, 7); // 格式：2026-05
+            System.out.println("预算检查：用户" + record.getUserId() + "在" + month + "添加了一笔支出");
+        }
         return record;
     }
 
     @Override
     public Record update(Record record) {
+        // 👇👇👇 新增：修改时也校验金额
+        if (record.getAmount() == null || record.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("金额必须大于0");
+        }
+
         // 根据ID更新
         recordMapper.updateById(record);
         return record;
@@ -32,6 +48,11 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void delete(Long id) {
+        // 👇👇👇 新增：检查记录是否存在
+        if (id == null || recordMapper.selectById(id) == null) {
+            throw new IllegalArgumentException("记录不存在，无法删除");
+        }
+
         // 根据ID删除
         recordMapper.deleteById(id);
     }
