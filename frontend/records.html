@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>记账管理 - 个人理财管理系统</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="navbar">
+  <div class="container">
+    <div>📊 个人理财管理系统</div>
+    <div>
+      <a href="dashboard.html">首页</a>
+      <a href="records.html">记账管理</a>
+      <a href="budget.html">预算管理</a>
+      <a href="javascript:logout()">退出登录</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="title">新增收支记录</div>
+    <div class="form-item">
+      <label>收支类型</label>
+      <select id="type">
+        <option value="expense">支出</option>
+        <option value="income">收入</option>
+      </select>
+    </div>
+    <div class="form-item">
+      <label>消费分类</label>
+      <select id="category">
+        <option>餐饮</option><option>交通</option><option>购物</option><option>娱乐</option>
+        <option>工资</option><option>奖金</option><option>兼职</option>
+      </select>
+    </div>
+    <div class="form-item">
+      <label>金额</label>
+      <input id="money" type="number" placeholder="请输入金额">
+    </div>
+    <div class="form-item">
+      <label>记录日期</label>
+      <input id="createTime" type="date">
+    </div>
+    <button class="btn btn-success" onclick="addRecordFunc()">提交记录</button>
+  </div>
+
+  <div class="card">
+    <div class="title">收支记录列表</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>类型</th><th>分类</th><th>金额</th><th>日期</th><th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="recordTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/axios-config.js"></script>
+
+<script>
+requireCurrentUser();
+
+window.onload = function () {
+  document.getElementById("createTime").value = new Date().toISOString().slice(0, 10);
+  getRecordList();
+};
+
+async function getRecordList() {
+  try {
+    const pageData = await api.get("/api/records", { params: { userId: getCurrentUser().id } });
+    const list = pageData.records || [];
+    let html = "";
+    list.forEach(item => {
+      const type = item.type === 'expense' ? "支出" : "收入";
+      html += `<tr><td>${type}</td><td>${escapeHtml(item.category)}</td><td>${escapeHtml(item.money)}</td><td>${escapeHtml(item.createTime)}</td>
+      <td><button class="btn btn-danger" onclick="deleteRecord(${item.id})">删除</button></td></tr>`;
+    });
+    document.getElementById("recordTable").innerHTML = html;
+  } catch (e) { alert("加载失败"); }
+}
+
+async function addRecordFunc() {
+  const type = document.getElementById("type").value;
+  const category = document.getElementById("category").value;
+  const money = Number(document.getElementById("money").value);
+  const createTime = document.getElementById("createTime").value;
+  if (!money || !createTime) { alert("请填写完整"); return; }
+  try {
+    await api.post("/api/records", { type, category, money, createTime });
+    alert("添加成功！");
+    document.getElementById("money").value = "";
+    getRecordList();
+  } catch (e) { alert("添加失败"); }
+}
+
+async function deleteRecord(id) {
+  if (!confirm("确定删除？")) return;
+  try {
+    await api.delete(`/api/records/${id}`);
+    alert("删除成功");
+    getRecordList();
+  } catch (e) { alert("删除失败"); }
+}
+
+function logout() {
+  if (confirm("确定退出？")) {
+    clearCurrentUser();
+    location.href = "index.html";
+  }
+}
+</script>
+
+</body>
+</html>
