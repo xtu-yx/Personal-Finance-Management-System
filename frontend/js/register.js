@@ -32,7 +32,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 
   try {
     await api.post('/api/user/register', { username, password, email });
-    window.location.href = 'index.html';
+    window.location.href = 'login.html';
   } catch (err) {
     alert.textContent = err.message || '注册失败';
     alert.className = 'alert alert-error show';

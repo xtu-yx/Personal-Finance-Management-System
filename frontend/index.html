@@ -3,107 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>首页 - 个人理财管理系统</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>个人理财管理系统</title>
 </head>
 <body>
-<nav class="navbar">
-  <div class="logo">个人<span>理财</span></div>
-  <ul class="nav-links">
-    <li><a href="index.html" class="active">首页</a></li>
-    <li><a href="records.html">记账管理</a></li>
-    <li><a href="budget.html">预算管理</a></li>
-  </ul>
-  <div class="user-info">
-    <span>欢迎，<span id="username" class="username">--</span></span>
-    <button type="button" class="btn-logout" id="logoutBtn">退出登录</button>
-  </div>
-</nav>
-
-<main class="container">
-  <section class="summary-grid">
-    <article class="summary-card">
-      <div class="label">本月收入</div>
-      <div class="value income" id="incomeValue">¥0.00</div>
-    </article>
-    <article class="summary-card">
-      <div class="label">本月支出</div>
-      <div class="value expense" id="expenseValue">¥0.00</div>
-    </article>
-    <article class="summary-card">
-      <div class="label">本月结余</div>
-      <div class="value balance" id="balanceValue">¥0.00</div>
-    </article>
-  </section>
-
-  <div class="card">
-    <div class="card-header">
-      <h2 class="card-title">收支分析图表</h2>
-    </div>
-    <div id="pieChart" class="chart-box"></div>
-    <div id="lineChart" class="chart-box"></div>
-  </div>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-<script src="js/axios-config.js"></script>
 <script>
 (function () {
-  const { requireCurrentUser, logout, getCurrentMonth, formatCurrency, formatDate, escapeHtml } = window.financeApp;
-  const currentUser = requireCurrentUser();
-
-  if (!currentUser) {
-    return;
-  }
-
-  document.getElementById('username').textContent = currentUser.username || '用户#' + currentUser.id;
-  document.getElementById('logoutBtn').addEventListener('click', logout);
-
-  const pieChart = echarts.init(document.getElementById('pieChart'));
-  const lineChart = echarts.init(document.getElementById('lineChart'));
-
-  window.addEventListener('resize', function () {
-    pieChart.resize();
-    lineChart.resize();
-  });
-
-  loadData();
-
-  async function loadData() {
-    const month = getCurrentMonth();
-    try {
-      const data = await api.get('/api/statistics/summary', {
-        params: { userId: currentUser.id, month },
-      });
-
-      document.getElementById('incomeValue').textContent = formatCurrency(data.income || 0);
-      document.getElementById('expenseValue').textContent = formatCurrency(data.expense || 0);
-      document.getElementById('balanceValue').textContent = formatCurrency(data.balance || 0);
-
-      pieChart.setOption({
-        title: { text: '支出分类占比' },
-        tooltip: { trigger: 'item' },
-        series: [{ type: 'pie', radius: '50%', data: data.categoryStats || [] }],
-      });
-
-      lineChart.setOption({
-        title: { text: '收支趋势' },
-        tooltip: { trigger: 'axis' },
-        xAxis: { data: data.dates || [] },
-        yAxis: {},
-        series: [
-          { name: '收入', type: 'line', data: data.incomeList || [] },
-          { name: '支出', type: 'line', data: data.expenseList || [] },
-        ],
-      });
-    } catch (error) {
-      pieChart.setOption({
-        title: { text: '支出分类占比' },
-        tooltip: { trigger: 'item' },
-        series: [{ type: 'pie', radius: '50%', data: [{ name: '暂无数据', value: 1 }] }],
-      });
-    }
+  var user = null;
+  try {
+    var raw = sessionStorage.getItem('finance.currentUser');
+    if (raw) { user = JSON.parse(raw); }
+  } catch (e) {}
+  if (user && user.id) {
+    window.location.href = 'dashboard.html';
+  } else {
+    window.location.href = 'login.html';
   }
 })();
 </script>

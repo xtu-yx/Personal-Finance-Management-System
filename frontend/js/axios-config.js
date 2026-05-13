@@ -1,6 +1,7 @@
 const api = axios.create({
   baseURL: 'http://localhost:8080',
   withCredentials: true,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -36,7 +37,7 @@ function clearCurrentUser() {
 function requireCurrentUser() {
   const user = getCurrentUser();
   if (!user || !user.id) {
-    window.location.href = 'index.html';
+    window.location.href = 'login.html';
     return null;
   }
   return user;
@@ -44,7 +45,7 @@ function requireCurrentUser() {
 
 function logout() {
   clearCurrentUser();
-  window.location.href = 'index.html';
+  window.location.href = 'login.html';
 }
 
 function getCurrentMonth() {
@@ -97,7 +98,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       clearCurrentUser();
-      window.location.href = 'index.html';
+      window.location.href = 'login.html';
     }
     throw new Error(error.response?.data?.message || '网络错误');
   }

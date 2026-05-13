@@ -84,7 +84,7 @@
   function buildSummaryFromRecords(records) {
     const categoryMap = new Map();
     const summary = records.reduce((acc, record) => {
-      const amount = Number(record.amount || 0);
+      const amount = Number(record.amount || record.money || 0);
       if (record.type === 'income') {
         acc.income += amount;
       } else {
@@ -123,7 +123,7 @@
       }
 
       const item = grouped.get(monthKey);
-      const amount = Number(record.amount || 0);
+      const amount = Number(record.amount || record.money || 0);
       if (record.type === 'income') {
         item.income += amount;
       } else {

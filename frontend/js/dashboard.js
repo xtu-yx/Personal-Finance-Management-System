@@ -78,7 +78,7 @@
   function buildSummaryFromRecords(records) {
     const categoryMap = new Map();
     const summary = records.reduce((acc, record) => {
-      const amount = Number(record.amount || 0);
+      const amount = Number(record.amount || record.money || 0);
       if (record.type === 'income') {
         acc.income += amount;
       } else {
@@ -156,7 +156,7 @@
           <td><span class="type-badge ${typeClass}">${typeText}</span></td>
           <td>${escapeHtml(record.category || '未分类')}</td>
           <td>${escapeHtml(record.remark || '--')}</td>
-          <td>${amountPrefix}${escapeHtml(formatCurrency(record.amount || 0))}</td>
+          <td>${amountPrefix}${escapeHtml(formatCurrency(record.amount || record.money || 0))}</td>
         </tr>
       `;
     }).join('');
